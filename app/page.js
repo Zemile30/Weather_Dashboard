@@ -1,69 +1,66 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+import Navbar from "@/components/layout/Navbar";
+import TabBar from "@/components/ui/TabBar";
+import { location, user, tabs, viewModes } from "@/lib/mockData";
+import TodayCard from "@/components/weather/TodayCard";
+import { today, weekly } from "@/lib/mockData";
+import WeeklyForecast from "@/components/weather/WeeklyForecast";
+import RainChart from "@/components/weather/RainChart";
+import { rainChance, rainLevels } from "@/lib/mockData";
+import WindStatus from "@/components/weather/WindStatus";
+import UVIndex from "@/components/weather/UVIndex";
+import Humidity from "@/components/weather/Humidity";
+import Visibility from "@/components/weather/Visibility";
+import MapBanner from "@/components/weather/MapBanner";
+import OtherCities from "@/components/weather/OtherCities";
+import { overview, mapBanner, otherCities } from "@/lib/mockData";
+
+
 
 export default function Home() {
+  const [activeTab, setActiveTab] = useState("Next 7days");
+  const [mode, setMode] = useState("Forecast");
+  const [dark, setDark] = useState(true);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.js
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="p-6">
+      <Navbar
+        city={location.city}
+        country={location.country}
+        user={user}
+        dark={dark}
+        onThemeChange={setDark}
+      />
+      <div className="mt-8 grid grid-cols-[1fr_300px] gap-x-7 gap-y-6">
+        <div className="flex items-center justify-between">
+          <TabBar tabs={tabs} active={activeTab} onChange={setActiveTab} />
+          <TabBar tabs={viewModes} active={mode} onChange={setMode} variant="pill" />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <h2 className="text-2xl">Chance Of Rain</h2>
+        <div className="flex justify-between">
+          <TodayCard data={today} />
+          <WeeklyForecast days={weekly} />
         </div>
-      </main>
-    </div>
+        <RainChart data={rainChance} levels={rainLevels} />
+        <h2 className="text-xl">Today's Overview</h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-base">Other Cities</h2>
+          <a href="#" className="text-sm">See All</a>
+        </div>
+
+        <div className="grid h-[517px] grid-cols-[290px_290px_1fr] grid-rows-2 gap-x-10 gap-y-[27px]">
+          <WindStatus data={overview.wind} />
+          <UVIndex data={overview.uvIndex} />
+          <div className="row-span-2">
+            <MapBanner data={mapBanner} />
+          </div>
+          <Humidity data={overview.humidity} />
+          <Visibility data={overview.visibility} />
+        </div>
+        <OtherCities cities={otherCities} />
+      </div>
+    </main>
   );
 }
