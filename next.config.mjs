@@ -6,6 +6,15 @@ const nextConfig = {
   },
   cacheComponents: true,
   partialPrefetching: true,
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "openweathermap.org",
+        pathname: "/img/wn/**",
+      },
+    ],
+  },
   turbopack: {
     rules: {
       "*.css": {

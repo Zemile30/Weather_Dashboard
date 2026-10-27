@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { weatherIcons } from "@/lib/weatherIcons";
+import { getIconKey } from "@/lib/weatherUtils";
 
 export default function TodayCard({ data }) {
   const {
@@ -7,6 +8,7 @@ export default function TodayCard({ data }) {
     time,
     temp,
     icon,
+    description,
     feelsLike,
     windDirection,
     windSpeed,
@@ -29,12 +31,14 @@ export default function TodayCard({ data }) {
             {temp}
             <sup className="text-3xl">°</sup>
           </p>
-          <Image
-            src={weatherIcons[icon]}
-            alt={icon}
-            width={56}
-            height={56}
-          />
+          {icon ? (
+            <Image
+              src={weatherIcons[getIconKey(icon)]}
+              alt={description ?? "Weather icon"}
+              width={56}
+              height={56}
+            />
+          ) : null}
         </div>
 
         <div className="mt-4 flex justify-between text-xs">

@@ -1,8 +1,20 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import { Bell, LayoutGrid, MapPin, Search } from "lucide-react";
 import ToggleSwitch from "@/components/ui/ToggleSwitch";
 
-export default function Navbar({ city, country, user, dark, onThemeChange }) {
+export default function Navbar({ city, country, user, dark, onThemeChange, onSearch }) {
+  const [query, setQuery] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const name = query.trim();
+    if (!name) return;
+    onSearch(name);
+  };
+
   return (
     <header className="grid grid-cols-[1fr_auto_1fr] items-center">
       <div className="flex items-center gap-4">
@@ -28,14 +40,21 @@ export default function Navbar({ city, country, user, dark, onThemeChange }) {
         </div>
       </div>
 
-      <label className="flex h-[46px] w-[492px] items-center gap-4 rounded-xl bg-card px-6 text-sm">
-        <Search size={24} />
+      <form
+        onSubmit={handleSubmit}
+        className="flex h-[46px] w-[492px] items-center gap-4 rounded-xl bg-card px-6 text-sm"
+      >
+        <button type="submit" aria-label="Search" className="flex items-center">
+          <Search size={24} />
+        </button>
         <input
           type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
           placeholder="Search City"
-          className="w-full bg-transparent text-muted outline-none placeholder:text-muted"
+          className="w-full bg-transparent text-white outline-none placeholder:text-muted"
         />
-      </label>
+      </form>
 
       <div className="flex items-center gap-4 justify-self-end">
         <ToggleSwitch checked={dark} onChange={onThemeChange} />

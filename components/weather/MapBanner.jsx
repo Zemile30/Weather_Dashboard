@@ -5,13 +5,16 @@ export default function MapBanner({ data }) {
 
   return (
     <section className="relative h-full overflow-hidden rounded-[24px]">
-      <Image
-        src={image}
-        alt={title ?? ""}
-        fill
-        sizes="404px"
-        className="object-cover rounded-[24px]"
-      />
+      {image ? (
+        <Image
+          src={image}
+          alt={title ?? ""}
+          fill
+          sizes="404px"
+          loading="eager"
+          className="object-cover rounded-[24px]"
+        />
+      ) : null}
     </section>
   );
 }
